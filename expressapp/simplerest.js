@@ -1,15 +1,16 @@
 // 1. load express and other modules
 var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 // 2. create its instance
 var instance = express();
 
 // 2a. the data layer
 var products = [
-    { ProductId: 1001, ProductName: 'P1', CategoryName: 'C1' },
-    { ProductId: 1002, ProductName: 'P2', CategoryName: 'C2' },
-    { ProductId: 1003, ProductName: 'P3', CategoryName: 'C1' },
-    { ProductId: 1004, ProductName: 'P4', CategoryName: 'C2' },
+    { ProductId: 1001, ProductName: 'Laptop', CategoryName: 'Electronics', Manufacturer: 'HP', Price: 10000 },
+    { ProductId: 1002, ProductName: 'desktop', CategoryName: 'Electronics', Manufacturer: 'HP', Price: 10000 },
+    { ProductId: 1003, ProductName: 'Router', CategoryName: 'Electronics', Manufacturer: 'HP', Price: 10000 },
+    { ProductId: 1004, ProductName: 'RAM', CategoryName: 'Electronics', Manufacturer: 'HP', Price: 10000 },
 ];
 
 // 2b. configure the Message-Formatting Middleware for express
@@ -18,11 +19,16 @@ var products = [
 instance.use(bodyParser.json());
 instance.use(bodyParser.urlencoded({ extended: false })); // no url encoded values
 
+// 2c. configure the CORS middleware for the express instance
+// cors() w/o parameters means all origines, all headers  and all methods
+instance.use(cors());
+
 // 3. create REST API
 // the REST methods accepts the URI for Routing and
 // RequestHandler, the callback for Request and Response processing
 // http://localhost:9009/api/products
 instance.get('/api/products', function(request, response) {
+    // response.send(JSON.stringify(products));
     var authValues = request.headers.authorization;
     // read the auth values are process it
     var recivedValues = authValues.split(' ');
@@ -69,8 +75,11 @@ instance.post('/api/products', function(request, response) {
     // store data locally in JSON object with Key:Value pair 
     var prd = {
         ProductId: request.body.ProductId,
-        ProductNane: request.body.ProductName,
-        CategoryName: request.body.CategoryName
+        ProductName: request.body.ProductName,
+        Manufacturer: request.body.Manufacturer,
+        CategoryName: request.body.CategoryName,
+        Price: request.body.Price
+
     };
     console.log('Received data ' + JSON.stringify(prd));
 
@@ -78,6 +87,15 @@ instance.post('/api/products', function(request, response) {
     products.push(prd);
 
     // send the modified array
+    response.send(JSON.stringify(products));
+});
+
+instance.delete('/api/products/:id', function(request, response) {
+    var id = request.params.id; // thie will provide Product Id
+    // 1. serach the index of the Product in the products array based on ProductId
+    // 2. Use splice() method of array to delete the product from array
+
+    // 3. return the remeining product array
     response.send(JSON.stringify(products));
 });
 
