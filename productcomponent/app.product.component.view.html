@@ -1,0 +1,61 @@
+<div>
+    <table>
+        <tr>
+            <td>ProductId</td>
+            <td>
+                <input type="text" [(ngModel)]="product.ProductId">
+            </td>
+        </tr>
+        <tr>
+            <td>ProductName</td>
+            <td>
+                <input type="text" [(ngModel)]="product.ProductName">
+            </td>
+        </tr>
+        <tr>
+            <td>CategoryName</td>
+            <td>
+                <select [(ngModel)]="product.CategoryName">
+                    <option *ngFor="let c of categoris" value="{{c}}">{{c}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Manufacturer</td>
+            <td>
+                <select [(ngModel)]="product.Manufacturer">
+                        <option *ngFor="let m of manufacturers" value="{{m}}">{{m}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>
+                <input type="text" [(ngModel)]="product.Price">
+            </td>
+        </tr>
+        <tr>
+            <td><input type="button" (click)="clear()" value="New"></td>
+            <td>
+                <input type="button" (click)="save()" value="Save">
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <td *ngFor="let h of headers">{{h}}</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of products" (click)="getSelectedData(p)">
+                <td *ngFor="let h of headers">{{p[h]}}</td>
+                <td>
+                    <input type="button" value="Delete">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
